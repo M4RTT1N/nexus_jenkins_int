@@ -1,0 +1,18 @@
+# Ignorar archivos y carpetas generados por Maven
+target/
+*.class
+
+# Ignorar archivos de configuración de IDE
+.idea/
+*.iml
+.vscode/
+
+# Ignorar archivos de log
+*.log
+
+# Ignorar archivos de configuración local
+application-local.properties
+
+# Ignorar archivos temporales
+*.tmp
+
