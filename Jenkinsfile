@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven 3.8.4'
-        jdk 'JDK 11'
+        maven 'Maven'  // Asegúrate de que este nombre coincida con tu configuración de Jenkins
+        jdk 'jdk11'    // Asegúrate de que este nombre coincida con tu configuración de Jenkins
     }
 
     stages {
@@ -28,7 +28,30 @@ pipeline {
         stage('Deploy to Nexus') {
             steps {
                 script {
-                    // Aquí añadiremos el snippet de integración con Nexus más adelante
+                    def nexusUrl = "http://localhost:8081"
+                    def nexusRepository = "maven-releases"
+                    def nexusCredentialsId = "nexus-credentials"
+                    
+                    def pom = readMavenPom file: 'pom.xml'
+                    def artifactId = pom.artifactId
+                    def groupId = pom.groupId
+                    def version = pom.version
+                    
+                    nexusArtifactUploader(
+                        nexusVersion: 'nexus3',
+                        protocol: 'http',
+                        nexusUrl: nexusUrl,
+                        groupId: groupId,
+                        version: version,
+                        repository: nexusRepository,
+                        credentialsId: nexusCredentialsId,
+                        artifacts: [
+                            [artifactId: artifactId,
+                             classifier: '',
+                             file: "target/${artifactId}-${version}.jar",
+                             type: 'jar']
+                        ]
+                    )
                 }
             }
         }
